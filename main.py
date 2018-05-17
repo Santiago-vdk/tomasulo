@@ -10,18 +10,23 @@ archivo = "/Users/vdek/Desktop/Algoritmos Arqui/Codigo.asm"
 
 instrucciones = []
 
-estaciones = [[], [], [], [], [], [], []]   # Estaciones posibles 10
-
-memoria = []
+estaciones = [[], [], [], [], [], [], []]   # Estaciones posibles 7
 
 operaciones = ["L.D","MUL.D", "SUB.D","S.D","ADD.D"]
 
+estado_instruccion = []
+
 # Declaracion de Registros
-registros = {'F0': 0, 'F1': 0, 'F2': 0,'F3': 0, 'F4': 0, 'F5': 0,'F6': 0, 'F7': 0, 'F8': 0, 'F9': 0,
-             'R0': 0, 'R1': 0, 'R2': 0,'R3': 0, 'R4': 0, 'R5': 0,'R6': 0, 'R7': 0, 'R8': 0, 'R9': 0,
-             'G0': 0, 'G1': 0, 'G2': 0,'G3': 0, 'G4': 0, 'G5': 0,'G6': 0, 'G7': 0, 'G8': 0, 'G9': 0}
+registros = {'F0': 0, 'F1': 1, 'F2': 2,'F3': 3, 'F4': 4, 'F5': 5,'F6': 6, 'F7': 7, 'F8': 8, 'F9': 9,
+             'R0': 0, 'R1': 1, 'R2': 2,'R3': 3, 'R4': 4, 'R5': 5,'R6': 6, 'R7': 7, 'R8': 8, 'R9': 9,
+             'G0': 0, 'G1': 1, 'G2': 2,'G3': 3, 'G4': 4, 'G5': 5,'G6': 6, 'G7': 7, 'G8': 8, 'G9': 9}
 
+memoria = []
 
+i = 0
+while(i<50):
+    memoria.append(0)
+    i += 1
 
 
 def extraerOperandos(line, i):
@@ -53,7 +58,7 @@ while(i<len(estaciones)):
         estacion.append( instrucciones[i][1] )    # Vj
         estacion.append(int(instrucciones[i][2]) + registros[ str(instrucciones[i][3]) ])       # Vk
     else:
-        estacion.append( instrucciones[i][1] )    # Vj
+        estacion.append( instrucciones[i][2] )    # Vj
         estacion.append(instrucciones[i][3] )     # Vk
 
     estacion.append(0)
@@ -74,12 +79,15 @@ while(i<len(instrucciones)):
         
         if(instrucciones[j][0] == instru[0]):       # Comparacion de nombres
             estaciones[j][-1] = instru[0] + str(k)
+
             k += 1
         j += 1
 
     j = 0
     k = 0
     i += 1
+
+
 
 
 # Ajuste de nombres
@@ -90,21 +98,37 @@ while(i<len(instrucciones)):
 
 
 
+matriz_oper_resultados = []
+# Guardado de operadores resultado
+i = 0
+while(i<len(instrucciones)):
+    operando = instrucciones[i][1] 
+    nombre = estaciones[i][0]
+    val = []
+    val.append(nombre)
+    val.append(operando)
+    matriz_oper_resultados.append(val)
+    i += 1
+    
+
+
+
 # Deteccion de riesgos 1
 i = 0
 j = 0
-
 while(i<len(instrucciones)):
     instru = instrucciones[i]
     estacion = estaciones[i]
-    
+        
     # Iteracion interna
     while(j<len(instrucciones)):
+        #print(instru, instrucciones[j])
         if(instru != instrucciones[j]):     # Si la instruccion que estoy evaluando no es la misma
-            
+
             if(instru[1] == instrucciones[j][2]):         # Comparar resultado con primer operando Qj
                 # Hay riesgo
                 estaciones[j].append(estacion[0])
+                
         j += 1
     j = 0
     i += 1
@@ -115,13 +139,15 @@ i = 0
 while(i<len(estaciones)):
     if(len(estaciones[i]) == 5):
         estaciones[i].append(0)
+    elif(len(estaciones[i]) > 6):
+        estaciones[i].pop()
     i += 1
 
 
 
 
 
-# Deteccion de riesgos 2
+# # Deteccion de riesgos 2
 i = 0
 j = 0
 
@@ -141,17 +167,19 @@ while(i<len(instrucciones)):
     i += 1
 
 
-# Insercion de 0 en caso de no darse la condicion
+# # Insercion de 0 en caso de no darse la condicion
 i = 0
 while(i<len(estaciones)):
     if(len(estaciones[i]) == 6):
         estaciones[i].append(0)
+    elif(len(estaciones[i]) > 7):
+        estaciones[i].pop()
     i += 1
 
 
 
 
-# Deteccion de riesgos 3
+# # Deteccion de riesgos 3
 i = 0
 j = 0
 
@@ -171,14 +199,16 @@ while(i<len(instrucciones)):
     i += 1
 
 
-# Insercion de 0 en caso de no darse la condicion
+# # Insercion de 0 en caso de no darse la condicion
 i = 0
 while(i<len(estaciones)):
     if(len(estaciones[i]) == 7):
         estaciones[i].append(0)
+    elif(len(estaciones[i]) > 8):
+        estaciones[i].pop()
     i += 1
 
-# Agregar indice para operacion
+# # Agregar indice para operacion
 i = 0
 while(i<len(estaciones)):
     if(estaciones[i][2] in operaciones):
@@ -207,8 +237,169 @@ while(i<len(estaciones)):
     i += 1
 
 
+
+# Llenar estado de instruccion
+i = 0
+while(i<len(estaciones)):
+    val = []
+    val.append(estaciones[i][0])
+    estado_instruccion.append(val)
+    i += 1
+
+
+
+# Cambiar estado de instrucciones a Issue
+i = 0
+while(i < 7):
+    estado_instruccion[i].append("Issue")
+    i += 1
+
+
+
+# Incluir 0 a todos los estados
+i = 0
+while(i < len(estado_instruccion)):
+    estado_instruccion[i].append(0)
+    i += 1
+
+
+# Pasar las instrucciones sin riesgo a Exe
+i = 0
+while(i < 7):
+    if(estaciones[i][9] == 0):
+        estado_instruccion[i][1] = "Exe"   
+    i += 1
+
+
+
+
+def checkFinished():
+    j = 0
+    flag = False
+    while(j < len(estado_instruccion)):
+        if(estado_instruccion[j][2] == 1):
+            flag = True
+        else:
+            flag = False
+        j += 1
+    
+    if(flag == True):
+        return True
+    else:
+        return False
+
+
+def getInstruccion(id):
+    i = 0
+    while(i < len(instrucciones)):
+        if(instrucciones[i][0] == id):
+            return instrucciones[i]
+        i += 1
+    return -1           # No encontrado
+    
+
+
+
+temporales = []
+i = 0
+while(checkFinished() == False):
+    
+    # Proceso de llenado de temporales en Exe
+    while(i < len(estado_instruccion)):
+        
+        if(estado_instruccion[i][1] == "Exe" and estaciones[i][-2] == 1):      # Add 
+
+            val = []
+            val.append(estaciones[i][0])
+            val.append( int(registros[estaciones[i][3]])  + int(registros[estaciones[i][4]]) ) 
+            val.append(estaciones[i][-2])
+
+            temporales.append(val)
+
+        elif(estado_instruccion[i][1] == "Exe" and estaciones[i][-2] == 2):     # Sub
+            val = []
+            val.append(estaciones[i][0])
+            temporales.append( int(registros[estaciones[i][3]])  - int(registros[estaciones[i][4]]) )   
+            val.append(estaciones[i][-2])
+
+            temporales.append(val)
+
+        elif(estado_instruccion[i][1] == "Exe" and estaciones[i][-2] == 3):     # Mul
+
+            val = []
+            val.append(estaciones[i][0])
+            temporales.append( int(registros[estaciones[i][3]])  * int(registros[estaciones[i][4]]) )   
+            val.append(estaciones[i][-2])
+
+            temporales.append(val)
+
+        elif(estado_instruccion[i][1] == "Exe" and estaciones[i][-2] == 4):     # STORE
+
+            val = []
+            val.append(estaciones[i][0])
+            temporales.append( int(instrucciones[i][2]) + registros[str(instrucciones[i][3])] )  # (0 + Valor R1)
+            val.append(estaciones[i][-2])
+
+            temporales.append(val)
+
+        elif(estado_instruccion[i][1] == "Exe" and estaciones[i][-2] == 5):     # LOAD  
+
+            val = []
+            val.append(estaciones[i][0])
+            temporales.append( int(instrucciones[i][2]) + registros[str(instrucciones[i][3])] )  # (0 + Valor R1)
+            val.append(estaciones[i][-2])
+
+            temporales.append(val)
+
+        i += 1
+
+    i = 0
+    while(i < len(estado_instruccion)):
+        if(estado_instruccion[i][1] == "Exe"):
+            estado_instruccion[i][1] = "Write"
+        i += 1
+
+    i = 0
+    while(i < len(temporales)):
+        
+        instruccion = temporales[i][0]
+        resultado = temporales[i][1]
+        operacion = temporales[i][2]
+        nombre_operador_resultado = -1
+
+        n = 0
+        while(n<len(matriz_oper_resultados)):
+            if(matriz_oper_resultados[i][0] == instruccion):
+                nombre_operador_resultado = matriz_oper_resultados[i][1]
+            
+            n += 1
+
+        if(nombre_operador_resultado == -1):
+            print("Error 3")
+        
+        
+
+        if(operacion == (1 or 2 or 3)):             # ADD #SUB #MUL
+            registros[nombre_operador_resultado] = resultado
+        elif(operacion == 4):           # STORE
+            memoria[resultado] = registros[nombre_operador_resultado]
+        elif(operacion == 5):           # LOAD
+            registros[nombre_operador_resultado] = memoria[resultado]
+        
+
+        i += 1
+
+k = 0
+while(k < len(temporales)):
+    print(temporales[k])
+    k += 1
+
+
+
+
 print("\n")
 k = 0
-while(k<len(estaciones)):
-    print(estaciones[k])
+while(k < len(estado_instruccion)):
+    print(estado_instruccion[k])
     k += 1
+
