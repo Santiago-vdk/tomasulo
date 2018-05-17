@@ -14,6 +14,7 @@ estaciones = [[], [], [], [], [], [], []]   # Estaciones posibles 10
 
 memoria = []
 
+operaciones = ["L.D","MUL.D", "SUB.D","S.D","ADD.D"]
 
 # Declaracion de Registros
 registros = {'F0': 0, 'F1': 0, 'F2': 0,'F3': 0, 'F4': 0, 'F5': 0,'F6': 0, 'F7': 0, 'F8': 0, 'F9': 0,
@@ -101,29 +102,109 @@ while(i<len(instrucciones)):
     while(j<len(instrucciones)):
         if(instru != instrucciones[j]):     # Si la instruccion que estoy evaluando no es la misma
             
-            if(instru[1] == instrucciones[j][2]):         # Comparar resultado con primer operando 
+            if(instru[1] == instrucciones[j][2]):         # Comparar resultado con primer operando Qj
                 # Hay riesgo
                 estaciones[j].append(estacion[0])
-
-                
-            
         j += 1
-    
-  
-
     j = 0
     i += 1
 
 
+# Insercion de 0 en caso de no darse la condicion
 i = 0
 while(i<len(estaciones)):
     if(len(estaciones[i]) == 5):
         estaciones[i].append(0)
-
     i += 1
 
 
 
+
+
+# Deteccion de riesgos 2
+i = 0
+j = 0
+
+while(i<len(instrucciones)):
+    instru = instrucciones[i]
+    estacion = estaciones[i]
+    
+    # Iteracion interna
+    while(j<len(instrucciones)):
+        if(instru != instrucciones[j]):     # Si la instruccion que estoy evaluando no es la misma
+            
+            if(instru[1] == instrucciones[j][3]):         # Comparar resultado con segundo operando Qk 
+                # Hay riesgo
+                estaciones[j].append(estacion[0])
+        j += 1
+    j = 0
+    i += 1
+
+
+# Insercion de 0 en caso de no darse la condicion
+i = 0
+while(i<len(estaciones)):
+    if(len(estaciones[i]) == 6):
+        estaciones[i].append(0)
+    i += 1
+
+
+
+
+# Deteccion de riesgos 3
+i = 0
+j = 0
+
+while(i<len(instrucciones)):
+    instru = instrucciones[i]
+    estacion = estaciones[i]
+    
+    # Iteracion interna
+    while(j<len(instrucciones)):
+        if(instru != instrucciones[j]):     # Si la instruccion que estoy evaluando no es la misma
+            
+            if(instru[1] == instrucciones[j][1]):         # Comparar resultado con resultado Rout 
+                # Hay riesgo
+                estaciones[j].append(estacion[0])
+        j += 1
+    j = 0
+    i += 1
+
+
+# Insercion de 0 en caso de no darse la condicion
+i = 0
+while(i<len(estaciones)):
+    if(len(estaciones[i]) == 7):
+        estaciones[i].append(0)
+    i += 1
+
+# Agregar indice para operacion
+i = 0
+while(i<len(estaciones)):
+    if(estaciones[i][2] in operaciones):
+        if(estaciones[i][2] == "L.D"):
+            estaciones[i].append(5)
+        elif(estaciones[i][2] == "MUL.D"):
+            estaciones[i].append(3)
+        elif(estaciones[i][2] == "SUB.D"):
+            estaciones[i].append(2)
+        elif(estaciones[i][2] == "S.D"):
+            estaciones[i].append(4)
+        elif(estaciones[i][2] == "ADD.D"):
+            estaciones[i].append(1)
+        else:
+            print("Error")
+    i += 1
+
+
+# Bandera de riesgo 
+i = 0
+while(i<len(estaciones)):
+    if((estaciones[i][4] and estaciones[i][4] and estaciones[i][4]) == 0):
+        estaciones[i].append(0)
+    else:
+        estaciones[i].append(1)
+    i += 1
 
 
 print("\n")
