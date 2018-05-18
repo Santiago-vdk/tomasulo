@@ -25,8 +25,9 @@ memoria = []
 
 i = 0
 while(i<50):
-    memoria.append(0)
+    memoria.append(i)
     i += 1
+
 
 
 def extraerOperandos(line, i):
@@ -288,7 +289,7 @@ def checkFinished():
     j = 0
     flag = False
     while(j < len(estado_instruccion)):
-        if(estado_instruccion[j][2] == 1):
+        if(estado_instruccion[j][2] == 1 and len(terminadas) == len(estado_instruccion)):
             flag = True
         else:
             flag = False
@@ -313,15 +314,16 @@ def getInstruccion(id):
 def noExe():
     n = 0
     flag = False
+    #print(estado_instruccion)
     while(n<len(estado_instruccion)):
         if(estado_instruccion[n][1] == "Exe"):
             flag = True
         n += 1
     
     if(flag == True):
-        return False
-    else:
         return True
+    else:
+        return False
 
 temporales = []         
 terminadas = []         # Arreglo que contiene el nombre de las instrucciones que ya fueron ejecutadas
@@ -329,18 +331,19 @@ terminadas = []         # Arreglo que contiene el nombre de las instrucciones qu
 
 
 def updateEstado_instruccion():
+
     k = 0
     while(k < len(estado_instruccion)):
         if(estado_instruccion[k][2] == 0):              # Si la instruccion aun no ha sido ejecutada
             nombre_instruccion = estado_instruccion[k][0]           # Nombre con el cual busco en las estaciones para revisar si resolvi la dependencia
-            
+            #print("Evaluando ", nombre_instruccion)
             l = 0
             while(l < len(estaciones)):
                 
                 if(nombre_instruccion == estaciones[l][0]):     # Cuando encuentro la instruccion
 
                     # Si todas las dependencias estan contenidas dentro de la lista de terminadas significa que puedo pasarla a Exe
-                    if( (estaciones[l][5] in terminadas) and (estaciones[l][6] in terminadas) and (estaciones[l][7] in terminadas) ):   
+                    if( (estaciones[l][5] in terminadas or estaciones[l][5] == 0) and (estaciones[l][6] in terminadas or estaciones[l][6] == 0) and (estaciones[l][7] in terminadas or estaciones[l][7] == 0) ):   
 
                         estado_instruccion[k][1] = "Exe"
                         estado_instruccion[k][2] = 1
@@ -354,18 +357,32 @@ def updateEstado_instruccion():
 
 
 
-
+# print("\n")
+# k = 0
+# while(k < len(estado_instruccion)):
+#     print(estado_instruccion[k])
+#     k += 1
 
 while(checkFinished() == False):
 
 
-    if(noExe() == True):                # Si ya no tengo instrucciones en Exe
-        print("Done")
-        updateEstado_instruccion()
-        break
+    if(noExe() == False):                # Si ya no tengo instrucciones en Exe
 
-    
-    
+        # print("\n")
+        # k = 0
+        # while(k < len(estado_instruccion)):
+        #     print(estado_instruccion[k])
+        #     k += 1
+
+
+        updateEstado_instruccion()
+
+
+        # print("\n")
+        # k = 0
+        # while(k < len(estado_instruccion)):
+        #     print(estado_instruccion[k])
+        #     k += 1
 
     
     # Proceso de llenado de temporales en Exe
@@ -381,17 +398,29 @@ while(checkFinished() == False):
             temporales.append(val)
 
         elif(estado_instruccion[i][1] == "Exe" and estaciones[i][-2] == 2):     # Sub
+            #print(estado_instruccion[i])
+            #print(estaciones[i])
+
             val = []
             val.append(estaciones[i][0])
-            val.append( int(registros[estaciones[i][3]])  - int(registros[estaciones[i][4]]) )   
+            res = int(registros[estaciones[i][3]]) - int(registros[estaciones[i][4]])
+
+            #print(res, registros[estaciones[i][3]], registros[estaciones[i][4]])
+            val.append( res )   
             val.append(estaciones[i][-2])
 
             temporales.append(val)
 
         elif(estado_instruccion[i][1] == "Exe" and estaciones[i][-2] == 3):     # Mul
+            #print(estado_instruccion[i])
+            #print(estaciones[i])
+
             val = []
             val.append(estaciones[i][0])
-            val.append( int(registros[estaciones[i][3]])  * int(registros[estaciones[i][4]]) )   
+            res = int(registros[estaciones[i][3]]) * int(registros[estaciones[i][4]])
+
+            #print(res, registros[estaciones[i][3]], registros[estaciones[i][4]])
+            val.append( res )   
             val.append(estaciones[i][-2])
 
             temporales.append(val)
@@ -425,6 +454,7 @@ while(checkFinished() == False):
         i += 1
 
 
+    #print(temporales)
 
     i = 0
     while(i < len(temporales)):
@@ -447,8 +477,11 @@ while(checkFinished() == False):
         if(nombre_operador_resultado == -1):
             print("Error 3")
         
+
+        print("WB numero:",i,"instruccion: ", instruccion, "operacion:", operacion, "resultado exe:", resultado, "Registro de guardado:", nombre_operador_resultado)
         
         if(operacion == (1 or 2 or 3)):             # ADD #SUB #MUL
+            
             registros[nombre_operador_resultado] = resultado
         elif(operacion == 4):           # STORE
             memoria[resultado] = registros[nombre_operador_resultado]
@@ -461,21 +494,17 @@ while(checkFinished() == False):
 
     n = 0
     while(n < len(estado_instruccion)):
-        
         if(estado_instruccion[n][1] == "Write"):
             estado_instruccion[n][1] = "Done"
             estado_instruccion[n][2] = 1
             terminadas.append(estado_instruccion[n][0])
         n += 1
     
-print(terminadas)
+    temporales = []
+    
 
-print("\n")
 
-k = 0
-while(k < len(estaciones)):
-    print(estaciones[k])
-    k += 1
+
 
 
 print("\n")
@@ -483,3 +512,14 @@ k = 0
 while(k < len(estado_instruccion)):
     print(estado_instruccion[k])
     k += 1
+
+
+print("\n")
+print("Valores finales de los registros")
+print("Valor de F0:", registros["F0"])
+print("Valor de F2", registros["F2"])
+print("Valor de F4", registros["F4"])
+print("Valor de F6", registros["F6"])
+print("Valor de F8", registros["F8"])
+print("Valor de F10", registros["F10"])
+print("Valor de Memoria[1]", memoria[1])
