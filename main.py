@@ -480,8 +480,7 @@ while(checkFinished() == False):
 
         print("WB numero:",i,"instruccion: ", instruccion, "operacion:", operacion, "resultado exe:", resultado, "Registro de guardado:", nombre_operador_resultado)
         
-        if(operacion == (1 or 2 or 3)):             # ADD #SUB #MUL
-            
+        if(operacion == 1 or operacion ==  2 or operacion ==  3):             # ADD #SUB #MUL
             registros[nombre_operador_resultado] = resultado
         elif(operacion == 4):           # STORE
             memoria[resultado] = registros[nombre_operador_resultado]
@@ -517,9 +516,9 @@ while(k < len(estado_instruccion)):
 print("\n")
 print("Valores finales de los registros")
 print("Valor de F0:", registros["F0"])
-print("Valor de F2", registros["F2"])
-print("Valor de F4", registros["F4"])
-print("Valor de F6", registros["F6"])
-print("Valor de F8", registros["F8"])
-print("Valor de F10", registros["F10"])
-print("Valor de Memoria[1]", memoria[1])
+print("Valor de F2:", registros["F2"])
+print("Valor de F4:", registros["F4"])
+print("Valor de F6:", registros["F6"])
+print("Valor de F8:", registros["F8"])
+print("Valor de F10:", registros["F10"])
+print("Valor de Memoria[1]:", memoria[1])
