@@ -6,7 +6,7 @@ instrucciones_total = ["L.D", "MUL.D", "SUB.D", "S.D", "ADD.D"]
 
 ############################################################
 
-archivo = "/Users/vdek/Desktop/Algoritmos Arqui/Codigo.asm"
+archivo = "C:/Downloads/tomasulo-master/Codigo.asm"
 
 instrucciones = []
 
@@ -353,18 +353,22 @@ def updateEstado_instruccion():
 
         k += 1
 
-
-
-
+print("\n")
+print("Impresion de las estaciones")
+print("[PATH, BUSY, TIPO INTRUCCION, Vj, Vk, Dependencia WAR con operando 1, Dependencia WAR con operando 2, Dependencia WAW, Codigo de Funcion, Bandera de Dependencia]")
+k = 0
+while(k < len(estaciones)):
+    print(estaciones[k])
+    k += 1
 
 print("\n")
+print("Impresion del flujo entre Issue, Exe y Write de las instrucciones")
 k = 0
 while(k < len(estado_instruccion)):
     print(estado_instruccion[k])
     k += 1
 
 while(checkFinished() == False):
-
 
     if(noExe() == False):                # Si ya no tengo instrucciones en Exe
 
@@ -520,13 +524,14 @@ while(k < len(estado_instruccion)):
     print(estado_instruccion[k])
     k += 1
 
+print("\n")
+
+print("Estado final de la memoria")
+print(memoria)
 
 print("\n")
-print("Valores finales de los registros")
-print("Valor de F0:", registros["F0"])
-print("Valor de F2:", registros["F2"])
-print("Valor de F4:", registros["F4"])
-print("Valor de F6:", registros["F6"])
-print("Valor de F8:", registros["F8"])
-print("Valor de F10:", registros["F10"])
-print("Valor de Memoria[1]:", memoria[1])
+
+print("Estado final de los registros")
+print(registros)
+
+
