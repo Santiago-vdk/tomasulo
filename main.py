@@ -180,7 +180,7 @@ while(i<len(estaciones)):
 
 
 
-# # Deteccion de riesgos 3
+# Deteccion de riesgos 3
 i = 0
 j = 0
 
@@ -357,32 +357,32 @@ def updateEstado_instruccion():
 
 
 
-# print("\n")
-# k = 0
-# while(k < len(estado_instruccion)):
-#     print(estado_instruccion[k])
-#     k += 1
+print("\n")
+k = 0
+while(k < len(estado_instruccion)):
+    print(estado_instruccion[k])
+    k += 1
 
 while(checkFinished() == False):
 
 
     if(noExe() == False):                # Si ya no tengo instrucciones en Exe
 
-        # print("\n")
-        # k = 0
-        # while(k < len(estado_instruccion)):
-        #     print(estado_instruccion[k])
-        #     k += 1
+        print("\n")
+        k = 0
+        while(k < len(estado_instruccion)):
+            print(estado_instruccion[k])
+            k += 1
 
 
         updateEstado_instruccion()
 
 
-        # print("\n")
-        # k = 0
-        # while(k < len(estado_instruccion)):
-        #     print(estado_instruccion[k])
-        #     k += 1
+        print("\n")
+        k = 0
+        while(k < len(estado_instruccion)):
+            print(estado_instruccion[k])
+            k += 1
 
     
     # Proceso de llenado de temporales en Exe
@@ -459,6 +459,8 @@ while(checkFinished() == False):
     i = 0
     while(i < len(temporales)):
         
+        res = []
+
         instruccion = temporales[i][0]
         resultado = temporales[i][1]
         operacion = temporales[i][2]
@@ -477,10 +479,20 @@ while(checkFinished() == False):
         if(nombre_operador_resultado == -1):
             print("Error 3")
         
-
-        print("WB numero:",i,"instruccion: ", instruccion, "operacion:", operacion, "resultado exe:", resultado, "Registro de guardado:", nombre_operador_resultado)
+        res.append(instruccion)
+        res.append(resultado)
+        res.append(operacion)
+        res.append(nombre_operador_resultado)
         
-        if(operacion == 1 or operacion ==  2 or operacion ==  3):             # ADD #SUB #MUL
+
+        #print("WB numero:",i,"instruccion: ", instruccion, "operacion:", operacion, "resultado exe:", resultado, "Registro de guardado:", nombre_operador_resultado)
+        
+
+        # Revisar el orden de las instrucciones y decido si puedo ejectuar la etapa de Write
+
+
+
+        if(operacion == 1 or operacion ==  2 or operacion ==  3):             # ADD SUB MUL
             registros[nombre_operador_resultado] = resultado
         elif(operacion == 4):           # STORE
             memoria[resultado] = registros[nombre_operador_resultado]
@@ -500,10 +512,6 @@ while(checkFinished() == False):
         n += 1
     
     temporales = []
-    
-
-
-
 
 
 print("\n")
